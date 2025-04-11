@@ -3,6 +3,7 @@ package org.zerock.sb2.config;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 @Log4j2
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 public class CustomSecurityConfig {
 
     @Bean
@@ -25,6 +27,9 @@ public class CustomSecurityConfig {
         http.formLogin(config -> {
            config.disable();
         });
+
+        //CSRF Token 비활성화
+        http.csrf(config -> config.disable());
 
         //세션 생성 필요 없음
         http.sessionManagement(config -> {
