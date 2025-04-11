@@ -53,6 +53,12 @@ public class TodoController {
         log.info("----------------post--------------------");
         log.info(dto);
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return ResponseEntity.ok(ActionResultDTO.<Long>builder()
                         .result("success")
                         .data(10L)
