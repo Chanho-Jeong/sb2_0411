@@ -34,6 +34,7 @@ public class TodoController {
                             .build()
                 );
 
+        return ResponseEntity.ok(list);
     }
 
 }
