@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/todos")
 @Log4j2
 @RequiredArgsConstructor
+@PreAuthorize("permitAll()")
 public class TodoController {
 
     @GetMapping("list")
@@ -42,6 +43,10 @@ public class TodoController {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        log.info("----------------------");
+        log.info(list);
+
 
         return ResponseEntity.ok(list);
     }

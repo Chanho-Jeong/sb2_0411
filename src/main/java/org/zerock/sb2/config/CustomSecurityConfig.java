@@ -24,6 +24,11 @@ public class CustomSecurityConfig {
 
         log.info("-------------configure-------");
 
+        http.cors(cors -> {
+            cors.configurationSource(corsConfigurationSource());
+        });
+
+
         //로그인 화면 필요 없음
         http.formLogin(config -> {
            config.disable();
@@ -39,6 +44,8 @@ public class CustomSecurityConfig {
 
         return http.build();
     }
+
+
 
     //CORS 설정
     @Bean
