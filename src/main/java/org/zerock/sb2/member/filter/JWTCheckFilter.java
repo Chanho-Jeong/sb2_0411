@@ -62,7 +62,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         //Access Token이 없는 경우
         if (headerStr == null || !headerStr.startsWith("Bearer ")) {
-            handleException(response, new Exception("ACCESS TOKEN NOT FOUND"));
+            handleException(response, JWTErrorCode.NO_ACCESS_TOKEN);
             return;
         }
 
@@ -70,10 +70,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void handleException(HttpServletResponse response, Exception e) throws IOException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    private void handleException(HttpServletResponse response, JWTErrorCode errorCode) throws IOException {
+        response.setStatus(errorCode.getCode());
         response.setContentType("application/json");
-        response.getWriter().println("{\"error\": \"" + e.getMessage() + "\"}");
+        response.getWriter().println("{\"error\": \"" + errorCode.getMessage() + "\"}");
     }
 
 }
