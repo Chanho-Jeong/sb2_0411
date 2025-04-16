@@ -45,6 +45,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
         log.info("------shouldNotFilter---------");
+
+        if(request.getServletPath().startsWith("/api/v1/member/")) {
+            return true;
+        }
+
         //부정의 부정 -> 긍정
         return false;
     }
@@ -64,6 +69,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (headerStr == null || !headerStr.startsWith("Bearer ")) {
             handleException(response, JWTErrorCode.NO_ACCESS_TOKEN);
             return;
+        }
+        String accessToken = headerStr.substring(7);
+
+        try {
+            jwtUtil.validateToken(accessToken);
+        } catch (Exception e) {
+            log.error("===========================");
+            log.error(e.getMessage());
         }
 
 
