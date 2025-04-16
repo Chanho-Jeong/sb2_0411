@@ -23,6 +23,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
+        log.info("------shouldNotFilter---------");
         //부정의 부정 -> 긍정
         return false;
     }
@@ -30,5 +31,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        log.info("------doFilterInternal---------");
+
+        filterChain.doFilter(request, response);
     }
 }
