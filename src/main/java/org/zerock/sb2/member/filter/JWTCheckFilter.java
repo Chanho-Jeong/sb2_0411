@@ -20,6 +20,27 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
 
+    public enum JWTErrorCode {
+
+        NO_ACCESS_TOKEN(401, "No access token");
+
+        private int code;
+        private String message;
+
+        JWTErrorCode(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+        public int getCode() {
+            return code;
+        }
+        public String getMessage() {
+            return message;
+        }
+
+    }
+
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
@@ -33,6 +54,26 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         log.info("------doFilterInternal---------");
 
+        log.info("requestURI: " + request.getRequestURI());
+
+        String headerStr = request.getHeader("Authorization");
+
+        log.info("headerStr: " + headerStr);
+
+        //Access Token이 없는 경우
+        if (headerStr == null || !headerStr.startsWith("Bearer ")) {
+            handleException(response, new Exception("ACCESS TOKEN NOT FOUND"));
+            return;
+        }
+
+
         filterChain.doFilter(request, response);
     }
+
+    private void handleException(HttpServletResponse response, Exception e) throws IOException {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.getWriter().println("{\"error\": \"" + e.getMessage() + "\"}");
+    }
+
 }
