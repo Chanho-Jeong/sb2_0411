@@ -84,7 +84,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String message = e.getMessage();
             if(message.startsWith("JWT signature")){
                 handleException(response, JWTErrorCode.BAD_SIGNATURE);
-            }else if(message.startsWith("JWT malformed")){
+            }else if(message.startsWith("Malformed")){
                 handleException(response, JWTErrorCode.MALFORMED_TOKEN);
             }else if(message.startsWith("JWT expired")){
                 handleException(response, JWTErrorCode.EXPIRED_TOKEN);
