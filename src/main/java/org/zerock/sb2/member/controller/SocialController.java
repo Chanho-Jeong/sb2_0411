@@ -58,6 +58,12 @@ public class SocialController {
         String accessToken = accessTokenStr.substring(7);
         String uid = "user00";
 
+        try {
+            jwtUtil.validateToken(refreshToken);
+        }catch(Exception e){
+            log.info("refresh token validation failed " + e.getMessage()); //JWT Expired ....
+        }
+
         String newAccessToken = jwtUtil.createToken(Map.of("uid",uid), 5);
         String newRefreshToken = jwtUtil.createToken(Map.of("uid",uid), 10); //60*24*7
 
