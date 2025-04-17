@@ -13,6 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.zerock.sb2.member.filter.JWTCheckFilter;
+import org.zerock.sb2.member.security.CustomAccessDeniedHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +38,11 @@ public class CustomSecurityConfig {
         //로그인 화면 필요 없음
         http.formLogin(config -> {
            config.disable();
+
+        });
+
+        http.exceptionHandling(config -> {
+            config.accessDeniedHandler(new CustomAccessDeniedHandler());
         });
 
         //CSRF Token 비활성화
