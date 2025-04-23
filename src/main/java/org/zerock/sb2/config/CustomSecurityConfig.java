@@ -28,38 +28,24 @@ public class CustomSecurityConfig {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-
+    
         log.info("-------------configure-------");
-
-        http.cors(cors -> {
-            cors.configurationSource(corsConfigurationSource());
-        });
-
-        //로그인 화면 필요 없음
-        http.formLogin(config -> {
-           config.disable();
-
-        });
-
-        http.exceptionHandling(config -> {
-            config.accessDeniedHandler(new CustomAccessDeniedHandler());
-        });
-
-        //CSRF Token 비활성화
-        http.csrf(config -> config.disable());
-
-        //세션 생성 필요 없음
-        http.sessionManagement(config -> {
-            config.sessionCreationPolicy(SessionCreationPolicy.NEVER);
-        });
-
-
-        http.addFilterBefore(jwtCheckFilter, UsernamePasswordAuthenticationFilter.class );
-
-
-
+    
+        http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .formLogin(form -> form.disable())
+            .exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAccessDeniedHandler()))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/member/signup", "/api/v1/member/login", "/api/v1/member/refresh").permitAll()
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtCheckFilter, UsernamePasswordAuthenticationFilter.class);
+    
         return http.build();
     }
+    
 
 
 

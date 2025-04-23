@@ -54,13 +54,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
         log.info("------shouldNotFilter---------");
-
-        if(request.getServletPath().startsWith("/api/v1/member/")) {
-            return true;
-        }
-
-        //부정의 부정 -> 긍정
-        return false;
+        
+        String path = request.getServletPath();
+        // 정확하게 로그인/회원가입만 예외 처리
+        return path.equals("/api/v1/member/login") ||
+               path.equals("/api/v1/member/signup") ||
+               path.equals("/api/v1/member/refresh");
     }
 
     @Override
